@@ -1,9 +1,0 @@
-[submodule "CAdep"]
-	path = CAdep
-	url = https://github.com/AqsaKashaf/CAdep.git
-[submodule "DNSdep"]
-	path = DNSdep
-	url = https://github.com/AqsaKashaf/DNSdep.git
-[submodule "CDNdep"]
-	path = CDNdep
-	url = https://github.com/AqsaKashaf/CDNdep.git
