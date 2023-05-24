@@ -108,10 +108,7 @@ def main():
     host = sys.argv[1]
     ocsp_CA = read_service_MAP("CA")
     count = 0
-    for ocsp, CA in ocsp_CA.items():
-        count+=1
-        print(f"{str(count)},{ocsp}")
-    # print(find_and_classify(host, ocsp_CA))
+    print(find_and_classify(host, ocsp_CA))
     # print(host, details["ocsp"], output)
     
 
