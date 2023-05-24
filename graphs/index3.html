@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link {
+  stroke: #212121;
+  stroke-width: 2px;
+}
+
+.node text {
+  pointer-events: none;
+  font-family: "Sans-serif";
+}
+.node circle {
+  stroke-width: 0px;
+}
+.d3-tip {
+    line-height: 0;
+    color: black;
+    font-family: "Sans-serif";
+}
+
+circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>
+<script>
+
+var width = 960,
+    height = 960;
+
+// var n = 3000,
+//     nodes = d3.range(n).map(function() { return {}; }),
+//     links = d3.range(n).map(function(d) { return {source: d, target: (d + 3) % n}; });
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    // .force("center", d3.forceCenter(width / 4, height / 2));
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("graph.json", function(error, json) {
+    if (error) throw error;
+
+    link = svg.selectAll(".link")
+        .data(json.links)
+        .enter().append("line")
+        .attr("class", "link")
+        .attr('marker-end', 'url(#end-arrow)');
+
+    node = svg.selectAll(".node")
+        .data(json.nodes)
+        .enter().append("g")
+        .attr("class", "node");
+
+    // json.nodes = appendInDegree(json.nodes, json.links);
+
+    simulation.nodes(json.nodes)
+    simulation.force("link").links(json.links)
+    simulation.force("charge").strength(-5)
+    simulation.force("charge").distanceMax(400)
+    simulation.force("charge").theta(0.7);
+
+    var loading = svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height / 2)
+    .attr("dy", ".35em")
+    .style("text-anchor", "middle")
+    .text("Simulating. One moment please…");
+
+// Use a timeout to allow the rest of the page to load first.
+    setTimeout(function() {
+
+  // Run the layout a fixed number of times.
+  // The ideal number of times scales with graph complexity.
+  // Of course, don't run too long—you'll hang the page!
+        simulation.restart();
+        for (var i = 20; i > 0; --i) simulation.tick();
+        simulation.stop();
+
+        svg.selectAll("line")
+            .data(json.links)
+            .enter().append("line")
+            .attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+        svg.selectAll("circle")
+            .data(json.nodes)
+            .enter().append("circle")
+            .attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; })
+            .attr("r", 4.5);
+
+        loading.remove();
+    }, 10);
+});
+
+function appendInDegree(nodes,links) {
+  for (var i = 0; i < nodes.length ; i++) {
+    nodes[i].inDegree = inDegree(nodes[i],links);
+    // console.log(nodes[i].inDegree)
+  }
+  return nodes;
+}
+function inDegree(n,allLinks) {
+  var degree = 0  
+  for(var i = 0; i < allLinks.length; i++) {
+    // console.log(allLinks[i].target)
+      if(allLinks[i].target == n.id) {
+        // console.log(degree)
+        degree += 1
+      }
+  }
+
+  return degree;
+}
+</script>

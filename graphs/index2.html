@@ -1,0 +1,94 @@
+<head>
+    <style> body { margin: 0; } </style>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="//unpkg.com/force-graph"></script>
+    <script src="//unpkg.com/d3-force"></script>
+    <!--<script src="../../dist/force-graph.js"></script>-->
+  </head>
+  
+  <body>
+    <div id="graph"></div>
+  
+    <script>
+    var width = 600,
+    height = 800
+     fetch('graph.json').then(res => res.json()).then(data => {
+     
+      data.nodes=appendInDegree(data.nodes,data.links)
+      const Graph = ForceGraph().width(width).height(height)
+      (document.getElementById('graph'))
+       Graph.cooldownTime(5000)
+      .d3AlphaDecay(0.25)
+      .d3VelocityDecay(0.25)
+
+      // Deactivate existing forces
+      .d3Force('center',d3.forceCenter(width / 4, height / 2))
+      .d3Force('charge', d3.forceManyBody())
+      // Add collision and bounding box forces
+      .d3Force('collide', d3.forceCollide(function(d) {
+        var rad = findRadius(d)
+        if(rad == 3) return rad*2 + 1
+            return rad + 1
+        }))
+      .nodeCanvasObject((node, ctx) => nodeShape(node, ctx))
+        .graphData(data)
+        .nodeId('id')
+        .nodeVal('val')
+        .nodeLabel('id')
+        // .nodeRelSize(6)
+        // .nodeAutoColorBy('group')
+        .linkSource('source')
+        .linkTarget('target')
+        Graph.d3Force('charge').distanceMax(400)
+        // Graph.d3Force('charge').strength(-10)
+        // Graph.onEngineStop(() => Graph.zoomToFit(500));
+    });
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+    function nodeShape(node, ctx) {
+        if(node.inDegree > 1) {
+            ctx.fillStyle = color("#76FF03")
+            ctx.beginPath(); ctx.arc(node.x, node.y, findRadius(node), 0, 2 * Math.PI, false); ctx.fill(); 
+            ctx.fillStyle = "#4C4E52"
+            const fontSize = Math.max(node.inDegree/10,30);
+            ctx.font = `${fontSize}px Sans-Serif`;
+            ctx.textAlign = 'center'; 
+            ctx.textBaseline = 'middle'; 
+            ctx.fillText(node.id, node.x, node.y); 
+        } else {
+            ctx.fillStyle = color(node.group)
+            ctx.beginPath(); ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI, false); ctx.fill(); 
+        }
+    //   [
+    //     () => { ctx.fillRect(x - 6, y - 4, 12, 8); }, // rectangle
+    //     () => { ctx.beginPath(); ctx.moveTo(x, y - 5); ctx.lineTo(x - 5, y + 5); ctx.lineTo(x + 5, y + 5); ctx.fill(); }, // triangle
+    //     () => { ctx.beginPath(); ctx.arc(x, y, 5, 0, 2 * Math.PI, false); ctx.fill(); }, // circle
+    //     () => { ctx.font = '10px Sans-Serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('Text', x, y); } // text
+    //   ][id%4]();
+    }
+    function appendInDegree(nodes,links) {
+  for (var i = 0; i < nodes.length ; i++) {
+    nodes[i].inDegree = inDegree(nodes[i],links);
+    // console.log(nodes[i].inDegree)
+  }
+  return nodes;
+}
+function findRadius(n) {
+    var count = n.inDegree
+    count = count == 0 ? 3 : 15 + (count/5)
+    return count
+}
+function inDegree(n,allLinks) {
+  var degree = 0  
+  for(var i = 0; i < allLinks.length; i++) {
+    // console.log(allLinks[i].target)
+      if(allLinks[i].target == n.id) {
+        // console.log(degree)
+        degree += 1
+      }
+  }
+
+  return degree;
+}
+
+    </script>
+  </body>

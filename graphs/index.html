@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link {
+  stroke: #212121;
+  stroke-width: 0.5px;
+}
+
+.node text {
+  pointer-events: none;
+  font-family: "Sans-serif";
+}
+.node circle {
+  stroke-width: 0px;
+}
+.d3-tip {
+    line-height: 0;
+    color: black;
+    font-family: "Sans-serif";
+}
+</style>
+<body style ="background-color:#BBDEFB;">
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>
+<script>
+//Toggle stores whether the highlighting is on
+var toggle = 0;
+//Create an array logging what is connected to what
+var linkedByIndex = {};
+var link, node;
+var min_zoom = 0.1;
+var max_zoom = 10;
+// var zoom = d3.zoom().scaleExtent([min_zoom,max_zoom])
+var width = 960,
+    height = 900
+// var allNodes;
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .call(d3.zoom().scaleExtent([0.1, 10]).on("zoom", zoomed))
+    .append("g")
+    .attr("transform", "translate(40,0)");
+
+var tool_tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-8, 0])
+  .html(function(d) {
+      return  d.id;
+  });
+svg.call(tool_tip);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 4, height / 2));
+
+
+var defs = svg.append('svg:defs');
+    defs.append('svg:marker')
+      .attr('id', 'end-arrow')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', "32")
+      .attr('markerWidth', 3.5)
+      .attr('markerHeight', 3.5)
+      .attr('orient', 'auto')
+      .append('svg:path')
+      .attr('d', 'M0,-5L10,0L0,5');
+
+
+d3.json("graph.json", function(error, json) {
+  if (error) throw error;
+
+  link = svg.selectAll(".link")
+      .data(json.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .attr('marker-end', 'url(#end-arrow)');
+
+  node = svg.selectAll(".node")
+      .data(json.nodes)
+    .enter().append("g")
+      .attr("class", "node");
+
+  json.nodes = appendInDegree(json.nodes, json.links);
+  
+  simulation
+    .nodes(json.nodes)
+    .on("tick", ticked, {passive: true});
+  simulation.force("link")
+    .links(json.links);
+  simulation.force("charge").strength(-5)
+  simulation.force("charge").distanceMax(400)
+  simulation.force("charge").theta(1)
+  simulation.force("collision", d3.forceCollide(function(d) {
+      var rad = findRadius(d, json.links)
+      if(rad == 3) return rad*2 + 1
+      return rad + 1
+    }));
+  simulation.force("collision").strength(0.5)
+  
+  for (i = 0; i < json.nodes.length; i++) {
+      linkedByIndex[i + "," + i] = 1;
+  };
+  json.links.forEach(function (d) {
+      linkedByIndex[d.source.index + "," + d.target.index] = 1;
+  });
+  
+  
+  node.append(function(d) {
+    // var indegree = inDegree(d,json.links)
+    if(d.inDegree < 1) {
+      var circle = document.createElementNS("http://www.w3.org/2000/svg","circle")
+      circle.setAttribute("r", 5)
+      circle.setAttribute("fill", color(d.group))
+      circle.setAttribute("stroke", "#ccc")
+      return circle
+    }
+    var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    var length = findRadius(d,json.links)
+    rect.setAttribute('x',-1*length/2);
+    rect.setAttribute('y',-1*length/2);
+    rect.setAttribute('width',length);
+    rect.setAttribute('height',length);
+    var pvt = "#d50000";
+    if(findPrivate(d) == 1) {
+      pvt =  "#76FF03";
+    }
+    rect.setAttribute("fill", pvt);
+    rect.setAttribute("stroke", "#212121")
+    return rect
+
+  })
+  // .on('mouseover', tool_tip.show) //Added
+    // .on('mouseout', tool_tip.hide)
+    // .on('dblclick', connectedNodes) //Added code; //Added 
+
+  // .call(d3.drag()
+          // .on("start", dragstarted)
+          // .on("drag", dragged)
+          // .on("end", dragended)) 
+    // .on('mouseover', tool_tip.show) //Added
+    // .on('mouseout', tool_tip.hide)
+    // .on('dblclick', connectedNodes) //Added code; //Added 
+
+  // node.append("text")
+  //     .attr("dx", -10)
+  //     .attr("dy", ".35em")
+  //     .attr("fill", function(d) { return textColor(d, json.links); })
+  //     .attr("font-size", function(d) {
+  //       var count = inDegree(d, json.links);
+  //       if(count > 0) return "15px";
+  //       return "0px"
+  //       })
+  //     .text(function(d) { return d.id });
+  
+  
+});
+
+//This function looks up whether a pair are neighbours
+function neighboring(a, b) {
+      return linkedByIndex[a.index + "," + b.index];
+}
+
+function connectedNodes() {
+      if (toggle == 0) {
+          //Reduce the opacity of all but the neighbouring nodes
+          d = d3.select(this).node().__data__;
+          node.style("opacity", function (o) {
+              return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+          });
+          link.style("opacity", function (o) {
+              return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+          });
+          //Reduce the op
+          toggle = 1;
+      } else {
+          //Put them back to opacity=1
+          node.style("opacity", 1);
+          link.style("opacity", 1);
+          toggle = 0;
+      }
+  }
+function textColor(d,allLinks) {
+  var count = d.inDegree;
+  if(count < 1) {
+    return "#757575";
+  }
+  return "#212121";
+}
+function findPrivate(d) {
+  if(d.inDegree == 1) {
+    return 1
+  }
+  return 0
+}
+function appendInDegree(nodes,links) {
+  for (var i = 0; i < nodes.length ; i++) {
+    nodes[i].inDegree = inDegree(nodes[i],links);
+    // console.log(nodes[i].inDegree)
+  }
+  return nodes;
+}
+function findRadius(n,allLinks) {
+    var count = n.inDegree
+    count = count == 0 ? 3 : 15 + (count/3)
+    return count
+}
+function inDegree(n,allLinks) {
+  var degree = 0  
+  for(var i = 0; i < allLinks.length; i++) {
+    // console.log(allLinks[i].target)
+      if(allLinks[i].target == n.id) {
+        // console.log(degree)
+        degree += 1
+      }
+  }
+
+  return degree;
+}
+
+function ticked() {
+  var ticksPerRender = 3;
+  requestAnimationFrame(function render() {
+    for (var i = 0; i < ticksPerRender; i++) {
+      simulation.tick();
+    }
+    link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { 
+      return "translate(" + (d.x) + "," + (d.y) + ")";
+    })
+    
+    if (simulation.alpha() > 0) {
+      requestAnimationFrame(render);
+    }
+  })
+}
+
+
+function zoomed() {
+  var transform = d3.event.transform
+  svg.attr("transform",transform)
+}
+</script>

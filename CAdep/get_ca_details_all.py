@@ -18,7 +18,7 @@ def main():
     
     
     websites = extract_crux_file(country, month)
-    ocsp_CA = read_OCSP_NAMES()
+    ocsp_CA = read_service_MAP("CA")
     results = {}
     count = 0
     for r,w in websites:
@@ -37,5 +37,5 @@ def main():
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('logging.conf')
+    logging.config.fileConfig('../log.conf')
     main()

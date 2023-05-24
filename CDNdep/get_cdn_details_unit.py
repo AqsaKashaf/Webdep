@@ -6,10 +6,11 @@ import sys
 from classification_utils import *
 import validators
 import json
-from cdn_utils import *
+from utils import *
 from get_soa import *
 from get_cname import *
 import logging
+from DNSdep import get_dns_details_unit
 # output: rank,website,provider,providerType,optional
 
 from collections import defaultdict
@@ -38,6 +39,7 @@ def find_if_cdn_third(website, cdn, cname, soa_w=None, soa_p=None):
     if("amazon" in website and "cloudfront" in cdn):
         return "Pvt"
     if(inSAN(website,cname_domain)):
+        # print("****************inSAN matches", website, cname_domain)
         return "Pvt"
 
     if(not soa_w): soa_w = get_SOA(website)
@@ -48,6 +50,7 @@ def find_if_cdn_third(website, cdn, cname, soa_w=None, soa_p=None):
    
     if(soa_p and match_TLD_website_SOAprovider(website, soa_p)):
         return "Pvt"
+    
     if(match_loose_TLD(website,cname)):
         return "Pvt"
     
@@ -56,6 +59,7 @@ def find_if_cdn_third(website, cdn, cname, soa_w=None, soa_p=None):
             return "Third"
   
     return third     
+
 
 def read_resources(website, harfiles_path):
     website_resources = set()
@@ -143,11 +147,24 @@ def classify(website, provider, cnames):
     
     output = "unknown"
     for c in cnames:
-        output = find_if_cdn_third(website, provider, c)
-        if(output != "unknown"):
-            break
-    
+        type = find_if_cdn_third(website, provider, c)
+        if(type != "unknown"):
+            output = type
+        if(output == "Third"):
+            return output
+            
     return output
+
+
+def find_service_dep(cdns, details):
+    service_dep = {}
+    for (host, cdn),type in cdns.items():
+        # if(type == "Third"):
+        cnames = details[cdn]
+        print(cnames)
+        for c in cnames:
+            service_dep[cdn] = get_dns_details_unit.find_and_classify(c)
+    return service_dep
 
 def main():
     # check if input given
@@ -157,9 +174,11 @@ def main():
     
     
     host = sys.argv[1]
-    CDN_MAP = read_CDN_MAP()
-    print(find_and_classify(host, CDN_MAP))
-    # print(host, details["ocsp"], output)
+    CDN_MAP = read_service_MAP("CDN")
+    result, details = find_and_classify(host, CDN_MAP)
+    service_dep = find_service_dep(result,details)
+    print(result, details)
+    print(service_dep)
     
 
 def find_and_classify(host: str, CDN_MAP: dict) -> tuple:
@@ -178,10 +197,10 @@ def find_and_classify(host: str, CDN_MAP: dict) -> tuple:
             result[(host,cdn)] = output
     
     
-    return result
+    return result, details
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('log.conf')
+    logging.config.fileConfig('../log.conf')
     main()
 

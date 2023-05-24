@@ -20,7 +20,7 @@ def main():
     
     month = get_last_month()
     websites = extract_crux_file(country, month)
-    CDN_MAP = read_CDN_MAP()
+    CDN_MAP = read_service_MAP("CDN")
     results = {}
     count = 0
     for r,w in websites:

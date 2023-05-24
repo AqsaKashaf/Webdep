@@ -4,6 +4,7 @@ import socket
 import ssl
 import sys
 from ca_utils import *
+from utils import *
 from get_soa import *
 from classification_utils import *
 import validators
@@ -105,7 +106,7 @@ def main():
     
    
     host = sys.argv[1]
-    ocsp_CA = read_OCSP_NAMES()
+    ocsp_CA = read_service_MAP("OCSP")
     count = 0
     for ocsp, CA in ocsp_CA.items():
         count+=1
