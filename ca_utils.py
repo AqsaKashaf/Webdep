@@ -4,19 +4,22 @@
 import urllib.parse
 import logging
 import ssl
+import json
 import socket
 log = logging.getLogger(__name__)
 from utils import *
-import certifi
 
 def get_san(website):
     try:
-        cert = getcert_old((website,443))
+        cert = getcert((website,443))
         _, san = parse_cert(cert)
         return san
     except Exception as e:
         log.exception(f"Soome error happened when getting cert for {website} in get_san, {str(e)}")
         return None
+def get_cert_node(addr,timeout=3):
+    output = run_subprocess(["node","find-CA.js",addr[0]])
+    return json.loads(output)
 
 def getcert_old(addr, timeout=3):
     """Retrieve server's certificate at the specified address (host, port)."""
@@ -24,7 +27,7 @@ def getcert_old(addr, timeout=3):
     # and it verifies ssl unconditionally, assuming create_default_context does
     sock = socket.create_connection(addr, timeout=timeout)
 
-    context = ssl.create_default_context(cafile=certifi.where())
+    context = ssl.create_default_context()
     context.check_hostname = False
     context.verify_mode = ssl.CERT_REQUIRED
         # But we instruct the SSL context to *not* validate the hostname.
@@ -38,6 +41,7 @@ def getcert(addr, timeout=None):
     # and it verifies ssl unconditionally, assuming create_default_context does
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     context.verify_mode = ssl.CERT_REQUIRED
+    context.check_hostname = False
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ssl_sock = context.wrap_socket(s, server_hostname=addr[0])
     ssl_sock.connect((addr[0], 443))
