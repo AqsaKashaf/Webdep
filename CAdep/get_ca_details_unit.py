@@ -106,7 +106,7 @@ def main():
     
    
     host = sys.argv[1]
-    ocsp_CA = read_service_MAP("OCSP")
+    ocsp_CA = read_service_MAP("CA")
     count = 0
     for ocsp, CA in ocsp_CA.items():
         count+=1
