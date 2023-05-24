@@ -8,7 +8,7 @@ import socket
 log = logging.getLogger(__name__)
 from utils import *
 
-ssl._create_default_https_context = ssl._create_unverified_context
+
 def get_san(website):
     try:
         cert = getcert((website,443))
@@ -23,6 +23,7 @@ def getcert(addr, timeout=None):
     """Retrieve server's certificate at the specified address (host, port)."""
     # it is similar to ssl.get_server_certificate() but it returns a dict
     # and it verifies ssl unconditionally, assuming create_default_context does
+    print(addr)
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     context.verify_mode = ssl.CERT_REQUIRED
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
