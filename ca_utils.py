@@ -8,7 +8,7 @@ import socket
 log = logging.getLogger(__name__)
 from utils import *
 
-
+ssl._create_default_https_context = ssl._create_unverified_context
 def get_san(website):
     try:
         cert = getcert((website,443))
