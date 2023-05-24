@@ -79,10 +79,10 @@ def get_CA_details(host: str, getSAN=False, san_file=None) -> str :
                 f.close()
             return details, sans
         except ssl.CertificateError as e:
-            return ("ssl-certificate-error" + str(e) + "\n")
+            return ("ssl-certificate-error" + str(e) + "\n"), None
         
         except socket.error as e:
-            return("socket-error" + str(e) + "\n")
+            return("socket-error" + str(e) + "\n"), None
 
     else:
         raise Exception("Invalid input")
@@ -117,14 +117,17 @@ def main():
 
 def find_and_classify(host: str, ocsp_CA: dict) -> tuple:
     details, sans = get_CA_details(host)
-    output = classify(host, details["ocsp"], sans)
-    stapling = str(check_stapling(host))
-    for ocsp in details["ocsp"]:
-        if(ocsp in ocsp_CA):
-            return (host, ocsp_CA[ocsp], output, stapling)
-    
-    add_CA_to_OCSP_NAMES(details["ocsp"],details["CA"])
-    return(host, ocsp, details["CA"], output, stapling)
+    if(sans):
+        output = classify(host, details["ocsp"], sans)
+        stapling = str(check_stapling(host))
+        for ocsp in details["ocsp"]:
+            if(ocsp in ocsp_CA):
+                return (host, ocsp_CA[ocsp], output, stapling)
+        
+        add_CA_to_OCSP_NAMES(details["ocsp"],details["CA"])
+        return(host, ocsp, details["CA"], output, stapling)
+    else:
+        log.error("get_ca_details incurred some error")
 
 if __name__ == "__main__":
     import logging.config
