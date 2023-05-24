@@ -21,19 +21,6 @@ def get_cert_node(addr,timeout=3):
     output = run_subprocess(["node","find-CA.js",addr[0]])
     return json.loads(output)
 
-def getcert_old(addr, timeout=3):
-    """Retrieve server's certificate at the specified address (host, port)."""
-    # it is similar to ssl.get_server_certificate() but it returns a dict
-    # and it verifies ssl unconditionally, assuming create_default_context does
-    sock = socket.create_connection(addr, timeout=timeout)
-
-    context = ssl.create_default_context()
-    context.check_hostname = False
-    context.verify_mode = ssl.CERT_REQUIRED
-        # But we instruct the SSL context to *not* validate the hostname.
-        
-    sslsock = context.wrap_socket(sock, server_hostname=addr[0])
-    return sslsock.getpeercert()
 
 def getcert(addr, timeout=None):
     """Retrieve server's certificate at the specified address (host, port)."""

@@ -116,7 +116,7 @@ def main():
 
 def find_and_classify(host: str, ocsp_CA: dict) -> tuple:
     details, sans = get_CA_details(host)
-    print(details, sans)
+    # print(details, sans)
     if(sans):
         output = classify(host, details["ocsp"], sans)
         stapling = str(check_stapling(host))

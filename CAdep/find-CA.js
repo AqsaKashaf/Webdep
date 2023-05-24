@@ -10,7 +10,7 @@ get_certificate(website)
 
 function get_certificate(website) {        
     try {
-        sslCertificate.get(website,5000, 443,"https:",true).then(function (certificate) {
+        sslCertificate.get(website,3000, 443,"https:",true).then(function (certificate) {
             let result = {}
             result["CA"] = certificate.issuer.O
             result["ocsp"] = certificate.infoAccess["OCSP - URI"]
