@@ -54,11 +54,14 @@ def check_valid_country(code: str) -> str:
 
 def write_results(country, service, month, data):
     filename = f"{country}-{service}-{month}"
-    print(filename)
     f = open(filename,"a")
     for (r,w),d in data.items():
-        f.write(f"{r},{','.join(d)}\n")
+        try:
+            f.write(f"{r},{','.join(d)}\n")
+        except Exception as e:
+            log.exception(f"some wrror ocurred while writing result {r},{w}, {str(e)}")
     f.close()
+    
     
 
 
