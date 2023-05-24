@@ -22,7 +22,7 @@ def get_cert_node(addr,timeout=3):
     output = run_subprocess(["node","find-CA.js",addr[0]])
     try:
         output = json.loads(output)
-        ocsp = output["ocsp"]
+        ocsp = output["ocsp"][0]
         ocsp_domain = urllib.parse.urlparse(ocsp).netloc
         if(ocsp_domain):
             output["ocsp"] = [ocsp_domain]
