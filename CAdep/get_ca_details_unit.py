@@ -131,6 +131,6 @@ def find_and_classify(host: str, ocsp_CA: dict) -> tuple:
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('log.conf')
+    logging.config.fileConfig('../log.conf')
     main()
 
