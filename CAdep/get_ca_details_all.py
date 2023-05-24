@@ -25,11 +25,11 @@ def main():
         output = find_and_classify(w,ocsp_CA)
         results[(r,w)] = output
         count+=1
-        if(count == 1000):
+        if(count % 5 == 0):
             print(country,"ca",month,results)
             write_results(country,"ca",month,results)
             results = {}
-            count = 0
+        if(count == 1000):
             exit()
 
 
