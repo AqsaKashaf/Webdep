@@ -21,7 +21,18 @@ def get_cert_node(addr,timeout=3):
     
     output = run_subprocess(["node","find-CA.js",addr[0]])
     try:
-        return json.loads(output)
+        output = json.loads(output)
+        ocsp = output["ocsp"]
+        ocsp_domain = urllib.parse.urlparse(ocsp).netloc
+        if(ocsp_domain):
+            output["ocsp"] = [ocsp_domain]
+        
+        san_list = output["san"]
+    
+        san_list = [i[1].replace("*.","") for i in san_list]
+        san_list = set([get_domain_from_subdomain(i) for i in san_list])
+        sans = ",".join(san_list)
+        return output, sans
     except Exception as e:
         log.exception(f"node find-CA prob returned some error, {str(e)}")
 
