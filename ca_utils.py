@@ -7,7 +7,7 @@ import ssl
 import socket
 log = logging.getLogger(__name__)
 from utils import *
-
+import certifi
 
 def get_san(website):
     try:
@@ -24,7 +24,7 @@ def getcert_old(addr, timeout=3):
     # and it verifies ssl unconditionally, assuming create_default_context does
     sock = socket.create_connection(addr, timeout=timeout)
 
-    context = ssl.create_default_context()
+    context = ssl.create_default_context(cafile=certifi.where())
     context.check_hostname = False
     context.verify_mode = ssl.CERT_REQUIRED
         # But we instruct the SSL context to *not* validate the hostname.
