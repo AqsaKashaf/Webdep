@@ -11,24 +11,38 @@ from utils import *
 
 def get_san(website):
     try:
-        cert = getcert((website,443))
+        cert = getcert_old((website,443))
         _, san = parse_cert(cert)
         return san
     except Exception as e:
         log.exception(f"Soome error happened when getting cert for {website} in get_san, {str(e)}")
         return None
 
+def getcert_old(addr, timeout=3):
+    """Retrieve server's certificate at the specified address (host, port)."""
+    # it is similar to ssl.get_server_certificate() but it returns a dict
+    # and it verifies ssl unconditionally, assuming create_default_context does
+    sock = socket.create_connection(addr, timeout=timeout)
+
+    context = ssl.create_default_context()
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_REQUIRED
+        # But we instruct the SSL context to *not* validate the hostname.
+        
+    sslsock = context.wrap_socket(sock, server_hostname=addr[0])
+    return sslsock.getpeercert()
 
 def getcert(addr, timeout=None):
     """Retrieve server's certificate at the specified address (host, port)."""
     # it is similar to ssl.get_server_certificate() but it returns a dict
     # and it verifies ssl unconditionally, assuming create_default_context does
-    print(addr)
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     context.verify_mode = ssl.CERT_REQUIRED
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ssl_sock = context.wrap_socket(s, server_hostname=addr[0])
     ssl_sock.connect((addr[0], 443))
+
+
     return ssl_sock.getpeercert()
 
 
