@@ -18,9 +18,12 @@ def get_san(website):
         log.exception(f"Soome error happened when getting cert for {website} in get_san, {str(e)}")
         return None
 def get_cert_node(addr,timeout=3):
+    
     output = run_subprocess(["node","find-CA.js",addr[0]])
-    return json.loads(output)
-
+    try:
+        return json.loads(output)
+    except Exception as e:
+        log.exception(f"node find-CA prob returned some error, {str(e)}")
 
 def getcert(addr, timeout=None):
     """Retrieve server's certificate at the specified address (host, port)."""
