@@ -80,11 +80,10 @@ def get_CA_details(host: str, getSAN=False, san_file=None) -> str :
                 f.write(sans)
                 f.close()
             return details, sans
-        except ssl.CertificateError as e:
-            return ("ssl-certificate-error" + str(e) + "\n"), None
+        except Exception as e:
+            log.exception(e)
+            return (str(e)), None
         
-        except socket.error as e:
-            return("socket-error" + str(e) + "\n"), None
 
     else:
         raise Exception("Invalid input")
