@@ -5,3 +5,7 @@
 1000,youjizz.com,ocsp.sectigo.com,sectigolimited,Third,False
 1000,dailymail.co.uk,ocsp.digicert.com,digicertinc,Third,True
 1000,abcya.com,ocsp.r2m01.amazontrust.com,amazon,Third,False
+1000,edpuzzle.com,amazon,Third,False
+1000,mathplayground.com,digicertinc,Third,False
+1000,edpuzzle.com,amazon,Third,False
+1000,mathplayground.com,digicertinc,Third,False

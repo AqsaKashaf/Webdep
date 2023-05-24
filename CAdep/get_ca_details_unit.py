@@ -70,8 +70,10 @@ def get_CA_details(host: str, getSAN=False, san_file=None) -> str :
     if(valid_input):
         port = 443
         try:
-            cert = getcert((host, port),3)
-            details, sans = parse_cert(cert)
+            # cert = get_cert_node((host, port))
+            # details, sans = parse_cert(cert)
+            details = get_cert_node((host, port))
+            sans = details["san"]
             if(getSAN):
                 sans += f",{host}\n"
                 f = open(san_file,"a")
