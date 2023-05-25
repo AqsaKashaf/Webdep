@@ -17,7 +17,6 @@ def match_TLD_website_SOAprovider(website: str, soa_p: tuple) -> bool:
 
 def match_SOA(soa_w: tuple, soa_p: tuple) -> bool:
     match = True
-    
    
     soa_website_server = soa_w[0]
     soa_provider_server = soa_w[0]

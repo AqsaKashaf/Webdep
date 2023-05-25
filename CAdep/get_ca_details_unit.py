@@ -45,10 +45,10 @@ def find_if_ca_third(website, ocsp, san, soa_w=None, soa_p=None):
     
     if(not soa_w): soa_w = get_SOA(website)
     if(not soa_p): soa_p = get_SOA(website)
-    if(not match_SOA(soa_w, soa_p)):
+    if(soa_w and soa_p and not match_SOA(soa_w, soa_p)):
         return "Third"
    
-    if(match_TLD_website_SOAprovider(website, soa_p)):
+    if(soa_p and match_TLD_website_SOAprovider(website, soa_p)):
         return "Pvt"
     
     if(third == "unknown"):
