@@ -33,7 +33,7 @@ async function get_har(website) {
     try {
       await page.goto(`http://${website}`,{
         waitUntil: 'domcontentloaded',
-        timeout: 0,
+        timeout: 30000,
        });
     } catch (e) {
       fs.appendFileSync("harfiles/harlogs", website + ",error" + e.toString() + "\n");

@@ -24,13 +24,15 @@ def main():
     results = {}
     count = 0
     for r,w in websites:
-        output, _ = find_and_classify(w, CDN_MAP)
-        results[(r,w)] = output
+        if(count > 54):
+            output, _ = find_and_classify(w, CDN_MAP)
+            results[(r,w)] = output
+            if(count % 5 == 0):
+                print(country,"cdn",month,results)
+                write_results_cdn(output_file_path,country,"cdn",month,results)
+                results = {}
         count+=1
-        if(count % 5 == 0):
-            print(country,"cdn",month,results)
-            write_results_cdn(output_file_path,country,"cdn",month,results)
-            results = {}
+        
         if(count == 100):
             exit()
 
