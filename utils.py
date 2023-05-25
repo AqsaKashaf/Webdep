@@ -19,7 +19,7 @@ def run_subprocess(command: list) -> str:
     """Run subprocess with the input command"""
     output = ''
     try:
-        output = subprocess.check_output(command)
+        output = subprocess.check_output(command, timeout=30)
         output = str(output, 'utf-8')
     except subprocess.CalledProcessError as e:
         log.exception(str(e.output))

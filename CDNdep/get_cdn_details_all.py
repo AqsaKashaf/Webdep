@@ -25,6 +25,7 @@ def main():
     count = 0
     for r,w in websites:
         if(count > 54):
+            print(r,w)
             output, _ = find_and_classify(w, CDN_MAP)
             results[(r,w)] = output
             if(count % 5 == 0):
