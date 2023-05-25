@@ -1,3 +1,3 @@
 *.log
 myvenv/
-venv-webdep/
+venv-webdep/__pycache__
