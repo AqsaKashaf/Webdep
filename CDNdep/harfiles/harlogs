@@ -1,0 +1,4 @@
+academy.com,errorError: net::ERR_TIMED_OUT at http://academy.com
+academy.com,errorTimeoutError: Navigation timeout of 30000 ms exceeded
+academy.com,errorTimeoutError: Navigation timeout of 30000 ms exceeded
+nih.gov,errorError: net::ERR_EMPTY_RESPONSE at http://nih.gov
