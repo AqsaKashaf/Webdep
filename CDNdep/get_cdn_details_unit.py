@@ -176,7 +176,7 @@ def main():
     CDN_MAP = read_service_MAP("CDN")
     result, details = find_and_classify(host, CDN_MAP)
     # service_dep = find_service_dep(result,details)
-    # print(result, details)
+    print(result, details)
     # print(service_dep)
     
 
