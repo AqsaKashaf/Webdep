@@ -22,7 +22,7 @@ def main():
     results = {}
     count = 0
     for r,w in websites:
-        if(count >= 1800):
+        if(count >= 1335):
             output = find_and_classify(w,ocsp_CA)
             results[(r,w)] = output
             if(count % 5 == 0):

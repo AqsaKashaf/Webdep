@@ -60,9 +60,19 @@ def write_results(path, country, service, month, data):
             f.write(f"{r},{','.join(d)}\n")
         except Exception as e:
             log.exception(f"some wrror ocurred while writing result {r},{w}, {str(e)}")
+            print("coming")
     f.close()
     
-    
+def write_results_cdn(path, country, service, month, data):
+    filename = f"{path}/{country}-{service}-{month}"
+    f = open(filename,"a")
+    for (r,w),d in data.items():
+        try:
+            f.write(f"{r},{','.join(d)}\n")
+        except Exception as e:
+            log.exception(f"some wrror ocurred while writing result {r},{w}, {str(e)}")
+            print(e)
+    f.close()
 
 
 
