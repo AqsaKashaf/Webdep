@@ -132,7 +132,7 @@ def get_CDN_details(host: str, CDN_MAP: dict) -> dict :
     if(valid_input):
         get_har(host,HAR_DIR)
         resources = read_resources(host, HAR_DIR)
-        # remove_file(f"{HAR_DIR}/{host}.har")
+        remove_file(f"{HAR_DIR}/{host}.har")
         internal_resources = get_internal_resources(host, resources)
         cdns = find_CDN(internal_resources, CDN_MAP)
         return cdns
@@ -157,13 +157,12 @@ def classify(website, provider, cnames):
 
 
 def find_service_dep(cdns, details):
-    service_dep = {}
+    service_dep = defaultdict(list)
     for (host, cdn),type in cdns.items():
         # if(type == "Third"):
         cnames = details[cdn]
-        print(cnames)
         for c in cnames:
-            service_dep[cdn] = get_dns_details_unit.find_and_classify(c)
+            service_dep[cdn].append(get_dns_details_unit.find_and_classify(c))
     return service_dep
 
 def main():
@@ -176,9 +175,9 @@ def main():
     host = sys.argv[1]
     CDN_MAP = read_service_MAP("CDN")
     result, details = find_and_classify(host, CDN_MAP)
-    service_dep = find_service_dep(result,details)
-    print(result, details)
-    print(service_dep)
+    # service_dep = find_service_dep(result,details)
+    # print(result, details)
+    # print(service_dep)
     
 
 def find_and_classify(host: str, CDN_MAP: dict) -> tuple:

@@ -11,15 +11,16 @@ from utils import *
 
 def get_san(website):
     try:
-        cert = getcert((website,443))
-        _, san = parse_cert(cert)
+        _, san = get_cert_node((website,443))
+        # _, san = parse_cert(cert)
         return san
     except Exception as e:
-        log.exception(f"Soome error happened when getting cert for {website} in get_san, {str(e)}")
+        log.exception(f"Some error happened when getting cert for {website} in get_san, {str(e)}")
         return None
+    
 def get_cert_node(addr,timeout=3):
     
-    output = run_subprocess(["node","find-CA.js",addr[0]])
+    output = run_subprocess(["node","../find-CA.js",addr[0]])
     try:
         output = json.loads(output)
         ocsp = output["ocsp"][0]

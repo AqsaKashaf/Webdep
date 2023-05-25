@@ -208,7 +208,11 @@ def find_and_classify(host: str) -> tuple:
         NS_GRPS = read_service_MAP("DNS")
         groups, ns_groups = detect_redundancy(name_servers, ns_type, soa_ns, NS_GRPS)    
     
-    return ns_type, ns_groups
+    ns_grp_relevant = {}
+    for ns, type in ns_type.items():
+        if(type == "Third"):
+            ns_grp_relevant[ns] = ns_groups[ns]
+    return ns_type, ns_grp_relevant
 
 if __name__ == "__main__":
     import logging.config

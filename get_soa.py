@@ -22,7 +22,7 @@ def format_output(output: str) -> tuple:
     
 
 def get_SOA(domain: str) -> tuple:
-    print("domain soa", domain)
+    # print("domain soa", domain)
     output = None
     try:
         output = subprocess.check_output(['dig',"soa",domain, '+short'])
