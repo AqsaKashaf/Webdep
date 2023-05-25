@@ -24,7 +24,7 @@ def main():
     results = {}
     count = 0
     for r,w in websites:
-        if(count > 54):
+        if(count > 100):
             print(r,w)
             output, _ = find_and_classify(w, CDN_MAP)
             results[(r,w)] = output
@@ -34,7 +34,7 @@ def main():
                 results = {}
         count+=1
         
-        if(count == 100):
+        if(count == 1000):
             exit()
 
 
