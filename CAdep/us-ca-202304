@@ -1,18 +1,3 @@
-1000,edpuzzle.com,http://ocsp.r2m02.amazontrust.com,Amazon,Third,False
-1000,mathplayground.com,http://ocsp.digicert.com,Cloudflare, Inc.,Third,True
-1000,youjizz.com,http://ocsp.sectigo.com,Sectigo Limited,Third,False
-1000,dailymail.co.uk,http://ocsp.digicert.com,DigiCert Inc,Third,True
-1000,abcya.com,http://ocsp.r2m01.amazontrust.com,Amazon,Third,True
-1000,capitalone.com,http://ocsp.digicert.com,DigiCert Inc,Third,True
-1000,login.gov,http://r3.o.lencr.org,Let's Encrypt,Third,False
-1000,patreon.com,http://ocsp.digicert.com,Cloudflare, Inc.,Third,True
-1000,investopedia.com,http://r3.o.lencr.org,Let's Encrypt,Third,True
-1000,surveymonkey.com,http://ocsp.r2m02.amazontrust.com,Amazon,Third,True
-1000,pulsz.com,http://r3.o.lencr.org,Let's Encrypt,Third,True
-1000,belk.com,http://ocsp.globalsign.com/ca/gsatlasr3dvtlsca2022q4,GlobalSign nv-sa,Third,True
-1000,asrpro.com,http://status.thawte.com,DigiCert Inc,Third,False
-1000,calendly.com,http://ocsp.digicert.com,Cloudflare, Inc.,Third,True
-1000,drudgereport.com,http://e1.o.lencr.org,Let's Encrypt,Third,False
 1000,edpuzzle.com,amazon,Third,False
 1000,mathplayground.com,digicertinc,Third,True
 1000,youjizz.com,sectigolimited,Third,False
