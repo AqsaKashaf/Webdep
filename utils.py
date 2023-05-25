@@ -60,9 +60,6 @@ def write_results(path, country, service, month, data):
             f.write(f"{r},{','.join(d)}\n")
         except Exception as e:
             log.exception(f"some wrror ocurred while writing result {r},{w}, {str(e)}")
-            print("coming")
-            print(str(e))
-            exit()
     f.close()
     
     
