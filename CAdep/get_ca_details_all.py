@@ -22,16 +22,14 @@ def main():
     results = {}
     count = 0
     for r,w in websites:
-        output = find_and_classify(w,ocsp_CA)
-        results[(r,w)] = output
+        if(count >= 1000):
+            output = find_and_classify(w,ocsp_CA)
+            results[(r,w)] = output
         count+=1
         if(count % 5 == 0):
             print(country,"ca",month,results)
             write_results(country,"ca",month,results)
             results = {}
-        if(count == 1000):
-            exit()
-
 
         
 
