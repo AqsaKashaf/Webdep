@@ -11,8 +11,8 @@ import dateutil.relativedelta
 import socket
 import subprocess
 log = logging.getLogger(__name__)
-
-
+from config import *
+import pathlib
 
   
 def run_subprocess(command: list) -> str:
@@ -101,7 +101,7 @@ def check_if_valid(host: str) -> bool:
 
 def read_service_MAP(service: str) -> dict:
     
-    f = open(f"../{service.upper()}dep/{service.upper()}_MAP","r")
+    f = open(f"{PARENT_DIR_PATH}/{service.upper()}dep/{service.upper()}_MAP","r")
     links_provider = {}
     for line in f:
         line = line.strip().lower().split(",")

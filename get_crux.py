@@ -4,7 +4,7 @@
 from google.cloud import bigquery
 import tldextract
 from pathlib import Path
-
+from config import *
 from utils import *
 
 def preprocess_crux(results):
@@ -51,7 +51,7 @@ def read_crux_file(filename):
 
 
 def extract_crux_file(country, month):
-    crux_output_file = f"websites_{country}_{month}"
+    crux_output_file = f"{PARENT_DIR_PATH}/crux/websites_{country}_{month}"
     my_file = Path(crux_output_file)
     
     if my_file.is_file():

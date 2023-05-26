@@ -8,7 +8,7 @@ import json
 import socket
 log = logging.getLogger(__name__)
 from utils import *
-
+from config import *
 def get_san(website):
     try:
         _, san = get_cert_node((website,443))
@@ -20,7 +20,7 @@ def get_san(website):
     
 def get_cert_node(addr,timeout=3):
     
-    output = run_subprocess(["node","../find-CA.js",addr[0]])
+    output = run_subprocess(["node",f"{PARENT_DIR_PATH}/find-CA.js",addr[0]])
     try:
         output = json.loads(output)
         ocsp = output["ocsp"][0]
@@ -78,8 +78,8 @@ def parse_cert(cert: str) -> dict:
 
 
 
-def add_CA_to_OCSP_NAMES(ocsps: list,ca: str) -> None:
-    f = open("OCSP_NAMES","a")
+def add_CA_to_CA_MAP(ocsps: list,ca: str) -> None:
+    f = open(f"{PARENT_DIR_PATH}/CAdep/CA_MAP","a")
     f.write(f"{ca},{';'.join(ocsps)}\n")
     f.close()
 
