@@ -11,6 +11,7 @@ from DNSdep.get_ns import *
 from get_soa import *
 from DNSdep.group_utils import *
 import logging
+from config import *
 # output: rank,website,provider,providerType,optional
         
 from collections import defaultdict
@@ -157,7 +158,7 @@ def get_DNS_details(host: str) -> dict :
         raise Exception(f"Invalid input {host}")
 
 def read_DNS_concentration():
-    f = open("../DNSdep/last_DNS_data","r")
+    f = open(f"{PARENT_DIR_PATH}/DNSdep/last_DNS_data","r")
     conc = defaultdict(int)
     for line in f:
         line = line.strip().split(",")
@@ -216,6 +217,6 @@ def find_and_classify(host: str) -> tuple:
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('../log.conf')
+    logging.config.fileConfig(f'{PARENT_DIR_PATH}/log.conf')
     main()
 

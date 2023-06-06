@@ -8,12 +8,12 @@ from utils import *
 from get_soa import *
 from classification_utils import *
 import validators
-
+from config import *
 
 
 def check_stapling(host):
 
-    output = subprocess.check_output(["bash","bash-ocsp.sh",host])
+    output = subprocess.check_output(["bash",f"{PARENT_DIR_PATH}/CAdep/bash-ocsp.sh",host])
     if("OCSP Response Status: successful" in str(output)):
         return True
     return False
@@ -123,13 +123,13 @@ def find_and_classify(host: str, ocsp_CA: dict) -> tuple:
             if(ocsp in ocsp_CA):
                 return (host, ocsp_CA[ocsp], output, stapling)
         
-        add_CA_to_OCSP_NAMES(details["ocsp"],details["CA"])
+        add_CA_to_CA_MAP(details["ocsp"],details["CA"])
         return(host, ocsp, details["CA"], output, stapling)
     else:
         log.error("get_ca_details incurred some error")
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('../log.conf')
+    logging.config.fileConfig(f'{PARENT_DIR_PATH}/log.conf')
     main()
 

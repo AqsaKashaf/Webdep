@@ -12,10 +12,10 @@ from get_cname import *
 import logging
 from DNSdep import get_dns_details_unit
 # output: rank,website,provider,providerType,optional
-
+from config import *
 from collections import defaultdict
 log = logging.getLogger(__name__)
-HAR_DIR="./harfiles"
+HAR_DIR=f"{PARENT_DIR_PATH}/CDNdep/harfiles"
 
 def find_if_cdn_third(website, cdn, cname, soa_w=None, soa_p=None):
 
@@ -83,7 +83,7 @@ def read_resources(website, harfiles_path):
 
 
 def get_har(website, HAR_DIR):
-    output = run_subprocess(["node","get_har.js",website, HAR_DIR])
+    output = run_subprocess(["node",f"{PARENT_DIR_PATH}/CDNdep/get_har.js",website, HAR_DIR])
     if(output == -1):
         log.exception("Could not get har file")
 
@@ -200,6 +200,6 @@ def find_and_classify(host: str, CDN_MAP: dict) -> tuple:
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('../log.conf')
+    logging.config.fileConfig(f'{PARENT_DIR_PATH}/log.conf')
     main()
 

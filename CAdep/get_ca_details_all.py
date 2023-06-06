@@ -2,7 +2,7 @@ import sys
 from get_crux import *
 from get_ca_details_unit import *
 
-
+from config import *
 
 
 
@@ -27,7 +27,7 @@ def main():
             results[(r,w)] = output
             if(count % 5 == 0):
                 print(country,"ca",month,results)
-                write_results(".",country,"ca",month,results)
+                write_results("f{PARENT_DIR_PATH}/CAdep",country,"ca",month,results)
                 results = {}
         count+=1
         
@@ -36,5 +36,5 @@ def main():
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('../log.conf')
+    logging.config.fileConfig(f'{PARENT_DIR_PATH}/log.conf')
     main()

@@ -21,7 +21,7 @@ async function get_har(website) {
   if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
   }
-  let result_filename = "harfiles/" + website + '.har';
+  let result_filename = dir + "/" + website + '.har';
   if(fs.existsSync(result_filename)){
     return
   }
@@ -36,7 +36,7 @@ async function get_har(website) {
         timeout: 30000,
        });
     } catch (e) {
-      fs.appendFileSync("harfiles/harlogs", website + ",error" + e.toString() + "\n");
+      fs.appendFileSync(dir + "/harlogs", website + ",error" + e.toString() + "\n");
       return -1
     }
     await har.stop();
