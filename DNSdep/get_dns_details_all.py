@@ -32,10 +32,9 @@ def main():
     
     # print(results)
         count+=1
-        if(count % 20 == 0):
+        if(count % 100 == 0):
             write_results_dns(output_file_path,country,"dns",month,results)
             results = set()
-            exit()
     
 
 
