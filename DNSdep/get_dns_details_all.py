@@ -31,11 +31,10 @@ def main():
         
         # print(results)
         count+=1
-        if(count == 5):
+        if(count == 500):
             write_results_dns(output_file_path,country,"dns",month,results)
             results = {}
             count = 0
-            exit()
 
 
         
