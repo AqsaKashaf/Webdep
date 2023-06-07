@@ -19,18 +19,17 @@ def main():
     output_file_path = f"{PARENT_DIR_PATH}/DNSdep"
     month = get_last_month()
     websites = extract_crux_file(country, month)
-    results = []
+    results = set()
     count = 0
     for r,w in websites:
         ns_type, ns_groups = find_and_classify(w)
         for ns, type in ns_type.items():
             if(type=="Third"):
-                results.append((r,w,ns_groups[ns],type))
+                results.add((r,w,ns_groups[ns],type))
             else:
-                results.append((r,w,ns,type))
+                results.add((r,w,ns,type))
         
         # print(results)
-        results = set(results)
         count+=1
         if(count == 5):
             write_results_dns(output_file_path,country,"dns",month,results)
