@@ -22,13 +22,15 @@ def main():
     results = set()
     count = 0
     for r,w in websites:
-        print(r,w)
-        ns_type, ns_groups = find_and_classify(w)
-        for ns, type in ns_type.items():
-            if(type=="Third"):
-                results.add((r,w,ns_groups[ns],type))
-            else:
-                results.add((r,w,ns,type))
+        if(count>2000):
+            print(r,w)
+            ns_type, ns_groups = find_and_classify(w)
+            print(ns_type)
+            for ns, type in ns_type.items():
+                if(type=="Third"):
+                    results.add((r,w,ns_groups[ns],type))
+                else:
+                    results.add((r,w,ns,type))
     
     # print(results)
         count+=1

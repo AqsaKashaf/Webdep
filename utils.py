@@ -74,7 +74,7 @@ def write_results_cdn(path, country, service, month, data):
             for (_, cdn),type in d.items():
                 f.write(f"{r},{w},{cdn},{type}\n")
         except Exception as e:
-            log.exception(f"some wrror ocurred while writing result {r},{w}, {str(e)}")
+            log.exception(f"some error ocurred while writing result {r},{w}, {str(e)}")
             print(e)
     f.close()
 

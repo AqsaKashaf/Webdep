@@ -194,6 +194,7 @@ def main():
 
 def find_and_classify(host: str) -> tuple:
     name_servers = get_DNS_details(host)
+    print("name_servers",name_servers)
     soa_ns = {}
     soa_w = get_SOA(host)
     san_w = get_san(host)
