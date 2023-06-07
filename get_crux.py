@@ -28,8 +28,7 @@ def preprocess_crux(results):
 def query_crux(country, month):
     client = bigquery.Client()
     query = f"""
-        SELECT
-            DISTINCT origin,experimental.popularity.rank as rank
+        SELECT DISTINCT origin,experimental.popularity.rank as rank
         FROM `chrome-ux-report.country_{country}.{month}`
         ORDER BY experimental.popularity.rank ASC
         LIMIT 10000;
