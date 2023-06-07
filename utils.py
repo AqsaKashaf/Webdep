@@ -43,7 +43,7 @@ def isIP(ip):
     
 
 def get_last_month():
-    return (datetime.now() + dateutil.relativedelta.relativedelta(months=-1)).strftime("%Y%m")
+    return (datetime.now() + dateutil.relativedelta.relativedelta(months=-2)).strftime("%Y%m")
 
 def check_valid_country(code: str) -> str:
     try:
