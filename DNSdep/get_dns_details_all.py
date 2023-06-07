@@ -22,19 +22,21 @@ def main():
     results = set()
     count = 0
     for r,w in websites:
-        ns_type, ns_groups = find_and_classify(w)
-        for ns, type in ns_type.items():
-            if(type=="Third"):
-                results.add((r,w,ns_groups[ns],type))
-            else:
-                results.add((r,w,ns,type))
+        if(count>1000):
+            print(r,w)
+            ns_type, ns_groups = find_and_classify(w)
+            for ns, type in ns_type.items():
+                if(type=="Third"):
+                    results.add((r,w,ns_groups[ns],type))
+                else:
+                    results.add((r,w,ns,type))
         
         # print(results)
         count+=1
-        if(count == 500):
+        if(count % 50 == 0):
             write_results_dns(output_file_path,country,"dns",month,results)
             results = {}
-            count = 0
+    
 
 
         
