@@ -19,6 +19,7 @@ def main():
     output_file_path = f"{PARENT_DIR_PATH}/DNSdep"
     month = get_last_month()
     websites = extract_crux_file(country, month)
+    print(websites)
     results = []
     count = 0
     for r,w in websites:

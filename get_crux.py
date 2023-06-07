@@ -2,7 +2,6 @@
 # To run: python get_crux.py
 
 from google.cloud import bigquery
-import tldextract
 from pathlib import Path
 from config import *
 from utils import *
