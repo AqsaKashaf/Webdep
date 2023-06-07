@@ -17,7 +17,10 @@ function get_certificate(website) {
             let san = certificate.subjectaltname.replaceAll(",",";").replaceAll(" ","").replaceAll("DNS:","")
             result["san"] = san.split(";")
             console.log(JSON.stringify(result))
-        });
+        }).catch(err => {
+            result["error"] = err
+            console.log(JSON.stringify(result))
+        })
     } catch(e) {
         return e
     }              

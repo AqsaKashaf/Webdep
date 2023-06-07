@@ -35,7 +35,7 @@ def get_cert_node(addr,timeout=3):
         sans = ",".join(san_list)
         return output, sans
     except Exception as e:
-        log.exception(f"node find-CA prob returned some error, {str(e)}")
+        log.exception(f"node find-CA prob returned some error, {str(e)}, {str(output)}")
 
 def getcert(addr, timeout=None):
     """Retrieve server's certificate at the specified address (host, port)."""
