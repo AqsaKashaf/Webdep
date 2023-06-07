@@ -7,6 +7,7 @@ import ssl
 import json
 import socket
 log = logging.getLogger(__name__)
+
 from utils import *
 from config import *
 def get_san(website):
@@ -21,6 +22,7 @@ def get_san(website):
 def get_cert_node(addr,timeout=3):
     
     output = run_subprocess(["node",f"{PARENT_DIR_PATH}/find-CA.js",addr[0]])
+    print("cert node output",output)
     try:
         output = json.loads(output)
         ocsp = output["ocsp"][0]
