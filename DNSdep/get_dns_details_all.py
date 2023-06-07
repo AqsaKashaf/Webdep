@@ -29,7 +29,8 @@ def main():
             else:
                 results.append((r,w,ns,type))
         
-        print(results)
+        # print(results)
+        results = set(results)
         count+=1
         if(count == 5):
             write_results_dns(output_file_path,country,"dns",month,results)
