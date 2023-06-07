@@ -18,12 +18,12 @@ def format_output(output: str) -> tuple:
 def get_cname(domain: str) -> tuple:
     output = None
     try:
-        output = subprocess.check_output(['dig',domain, '+short'])
+        output = subprocess.check_output(['dig',domain, '+short'],timeout=30)
         output = str(output, 'utf-8').replace("\n",",").strip(",")
         if 'NXDOMAIN' in output:
             log.error(domain + ",unexpected NX domain error when getting SOA record\n")
         elif(output == ""):
-            output = subprocess.check_output(['dig',"www." + domain, '+short'])
+            output = subprocess.check_output(['dig',"www." + domain, '+short'],timeout=30)
             output = str(output, 'utf-8').replace("\n",",").strip(",")
             return format_output(output)
         elif 'SERVFAIL' in output:

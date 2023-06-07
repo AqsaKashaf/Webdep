@@ -25,12 +25,12 @@ def get_SOA(domain: str) -> tuple:
     # print("domain soa", domain)
     output = None
     try:
-        output = subprocess.check_output(['dig',"soa",domain, '+short'])
+        output = subprocess.check_output(['dig',"soa",domain, '+short'], timeout=30)
         output = str(output, 'utf-8').replace("\n",",").strip(",")
         if 'NXDOMAIN' in output:
             log.error(domain + ",unexpected NX domain error when getting SOA record\n")
         elif(output == ""):
-            output = subprocess.check_output(['dig', "soa", "www." + domain, '+short'])
+            output = subprocess.check_output(['dig', "soa", "www." + domain, '+short'],timeout=30)
             output = str(output, 'utf-8').replace("\n",",").strip(",")
             return format_output(output)
         elif 'SERVFAIL' in output:

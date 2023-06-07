@@ -18,25 +18,33 @@ def main():
     
     output_file_path = f"{PARENT_DIR_PATH}/DNSdep"
     month = get_last_month()
-    websites = extract_crux_file(country, month)
+    try:
+        websites = extract_crux_file(country, month)
+    except Exception as e:
+        log.exception(f"could nto get crux file {str(e)}")
+        raise Exception(f"could nto get crux file {str(e)}")
+
     results = set()
     count = 0
     for r,w in websites:
-        if(count>2000):
-            print(r,w)
-            ns_type, ns_groups = find_and_classify(w)
-            print(ns_type)
-            for ns, type in ns_type.items():
-                if(type=="Third"):
-                    results.add((r,w,ns_groups[ns],type))
-                else:
-                    results.add((r,w,ns,type))
-    
-    # print(results)
-        count+=1
-        if(count % 100 == 0):
-            write_results_dns(output_file_path,country,"dns",month,results)
-            results = set()
+        try:
+            if(count>2000):
+                print(r,w)
+                ns_type, ns_groups = find_and_classify(w)
+                print(ns_type)
+                for ns, type in ns_type.items():
+                    if(type=="Third"):
+                        results.add((r,w,ns_groups[ns],type))
+                    else:
+                        results.add((r,w,ns,type))
+            count+=1
+            if(count % 100 == 0):
+                write_results_dns(output_file_path,country,"dns",month,results)
+                results = set()
+        except Exception as e:
+            log.exception(f"Some exception occured for website {w}, {str(e)}")
+            print(e)
+        
     
 
 

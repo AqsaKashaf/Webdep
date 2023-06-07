@@ -194,12 +194,14 @@ def main():
 
 def find_and_classify(host: str) -> tuple:
     name_servers = get_DNS_details(host)
-    print("name_servers",name_servers)
+   
     soa_ns = {}
     soa_w = get_SOA(host)
     san_w = get_san(host)
     ns_type = {}
     third = 0
+    name_servers = set(name_servers)
+    print("name_servers",name_servers)
     for ns in name_servers:
         if(ns not in soa_ns):
             soa_ns[ns] = get_SOA(ns)
