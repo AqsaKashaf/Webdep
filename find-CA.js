@@ -18,6 +18,7 @@ function get_certificate(website) {
             result["san"] = san.split(";")
             console.log(JSON.stringify(result))
         }).catch(err => {
+            let result = {}
             result["error"] = err
             console.log(JSON.stringify(result))
         })
