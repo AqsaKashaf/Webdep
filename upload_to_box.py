@@ -24,6 +24,7 @@ class BoxClient:
         self.client = Client(auth)
 
     def upload_file(self,filepath,filename):
+        month = filename.split("-")[-1]
         folder_name = f'data-{month}'
 
         subfolders = self.client.folder(folder_id=self.root_folder_id).get_items()
