@@ -46,10 +46,12 @@ def get_last_month():
     return (datetime.now() + dateutil.relativedelta.relativedelta(months=-1)).strftime("%Y%m")
 
 def check_valid_country(code: str) -> str:
-    data = countries.get(code)
-    if(data):
-        return data.alpha2.lower()
-    return None
+    try:
+        data = countries.get(code)
+        if(data):
+            return data.alpha2.lower()
+    except Exception:
+        return None
 
 
 def write_results(path, country, service, month, data):
