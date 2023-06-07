@@ -53,7 +53,7 @@ def extract_crux_file(country, month):
     crux_output_file = f"{PARENT_DIR_PATH}/crux/websites_{country}_{month}"
     my_file = Path(crux_output_file)
     
-    if my_file.is_file():
+    if my_file.is_file() and my_file.stat().st_size != 0:
         return read_crux_file(crux_output_file)
     else:
         crux_file_han = open(crux_output_file, "w")
