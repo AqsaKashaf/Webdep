@@ -54,12 +54,13 @@ def check_valid_country(code: str) -> str:
         return None
 
 
-def write_results(path, country, service, month, data):
+def write_results_dns(path, country, service, month, data):
     filename = f"{path}/{country}-{service}-{month}"
     f = open(filename,"a")
-    for (r,w),d in data.items():
+    for item in data:
         try:
-            f.write(f"{r},{','.join(d)}\n")
+            r,w,ns,typ = item
+            f.write(f"{r},{w},{ns},{typ}\n")
         except Exception as e:
             log.exception(f"some wrror ocurred while writing result {r},{w}, {str(e)}")
             print("coming")

@@ -32,7 +32,7 @@ def main():
         print(results)
         count+=1
         if(count == 5):
-            write_results(output_file_path,country,"dns",month,results)
+            write_results_dns(output_file_path,country,"dns",month,results)
             results = {}
             count = 0
             exit()
