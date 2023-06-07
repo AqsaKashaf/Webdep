@@ -2,4 +2,5 @@
 myvenv/
 venv-webdep/
 __pycache__/
+.DS_Store
 
