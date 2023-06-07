@@ -41,10 +41,12 @@ def match_loose_TLD(website,provider):
     
 
 
-def inSAN(website, resource):
-    san = get_san(website)
-    if(san and resource in san):
+def inSAN(website, resource, san_w=None):
+    if(not san_w):
+        san_w = get_san(website)
+    if(san_w and resource in san_w):
         return True
+    
     return False
 
 def match_TLD(website,provider):
