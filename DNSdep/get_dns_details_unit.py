@@ -206,6 +206,7 @@ def find_and_classify(host: str) -> tuple:
         ns_type[ns] = classify(host, ns, soa_w, soa_ns[ns], san_w)
         if(ns_type[ns] == "Third"):
             third+=1
+    print(ns_type)
     ns_groups = {}
     if(third > 0):
         NS_GRPS = read_service_MAP("DNS")
