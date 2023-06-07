@@ -37,9 +37,14 @@ class BoxClient:
                 break
         if(not folder_exists):
             target_folder = self.client.folder(self.root_folder_id).create_subfolder(folder_name)
-            
-        chunked_uploader = self.client.folder(target_folder.id).get_chunked_uploader(file_path=filepath, file_name=filename)
-        uploaded_file = chunked_uploader.start()
+        
+        filesize = Path(filepath).stat().st_size
+        if(filesize > 20000000):
+            chunked_uploader = self.client.folder(target_folder.id).get_chunked_uploader(file_path=filepath, file_name=filename)
+            uploaded_file = chunked_uploader.start()
+        else:
+            uploaded_file  = self.client.folder(target_folder.id).upload(file_path=filepath, file_name=filename)
+        
         print(f'File "{uploaded_file.name}" uploaded to Box with file ID {uploaded_file.id}')
 
 
