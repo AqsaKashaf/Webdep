@@ -42,5 +42,5 @@ def main():
 
 if __name__ == "__main__":
     import logging.config
-    logging.config.fileConfig('../log.conf')
+    logging.config.fileConfig(f'{PARENT_DIR_PATH}/log.conf')
     main()
