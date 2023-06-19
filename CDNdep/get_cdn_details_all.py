@@ -13,6 +13,8 @@ def main():
     #     raise Exception("Please provide an output file path")
     
     output_file_path = f"{PARENT_DIR_PATH}/CDNdep" #sys.argv[1]
+    start = int(sys.argv[1])
+    end = int(sys.argv[2])
     if(len(sys.argv) > 1):
         country = sys.argv[1]
         if(not check_valid_country(country)):
@@ -24,7 +26,7 @@ def main():
     results = {}
     count = 0
     for r,w in websites:
-        if(count > 1000):
+        if(count >= start and count < end):
             print(r,w)
             output, _ = find_and_classify(w, CDN_MAP)
             results[(r,w)] = output
