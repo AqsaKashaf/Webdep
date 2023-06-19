@@ -15,8 +15,8 @@ def main():
     output_file_path = f"{PARENT_DIR_PATH}/CDNdep" #sys.argv[1]
     start = int(sys.argv[1])
     end = int(sys.argv[2])
-    if(len(sys.argv) > 1):
-        country = sys.argv[1]
+    if(len(sys.argv) > 3):
+        country = sys.argv[3]
         if(not check_valid_country(country)):
             raise Exception("Please enter a valid country code, {country} is not valid")
     
